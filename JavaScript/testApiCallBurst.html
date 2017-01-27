@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>AR OAuth Prototype</title>
+
+    <!-- JavaScripts -->
+    <script src="jQuery/jquery-3.1.1.min.js"></script>
+
+    <!--Atomic Reach-->
+    <script src="lib/js.cookie.js"></script>
+    <script src="lib/md5.js"></script>
+    <script src="lib/oauth.js"></script>
+    <script src="lib/sha1.js"></script>
+    <script src="lib/api_client.js"></script>
+    <script src="ar_config.js"></script>
+
+</head>
+<body>
+
+<h1>Atomic Reach OAuth Prototype</h1>
+
+<div>
+    Check Developer console for API response.
+</div>
+
+<script type="text/javascript">
+
+    $(document).ready(function ()
+    {
+        var client = {};
+        client = arClient();
+        // set delay interval between requests (ms)
+        client.setDelayInterval(0);
+        // identify with an app name
+        client.setAppName('AR_Prototype');
+        // issue / verify access tokens
+        client.init(API_HOST, CONSUMER_KEY, CONSUMER_SECRET, callbackApiConnected);
+
+        // API connected and ready to receive calls
+        function callbackApiConnected()
+        {
+
+            // an example article with three (3) paragraphs
+            var paragraphDataArray = [];
+
+            paragraphDataArray.push("Once there was a Czar who had  three lovely daughters. One day the three daughters went walking in the woods. They were enjoying themselves so much that they forgot the time and stayed too long. A dragon kidnapped the three daughters. As they were being dragged off they cried for help. Three heroes heard their cries and set off to rescue the daughters. The heroes came and fought the dragon and rescued the maidens. Then the heroes returned the daughters to their palace. When the Czar heard of the rescue, he rewarded the heroes.");
+
+            paragraphDataArray.push("It's no small feat in being the head of a major search engine that rivals Google Search in giving better industry information based on important filters, including the type of content and shares. This was accomplished with his clear startup mentality...");
+
+            paragraphDataArray.push("As a self-proclaimed data nerd, who loves to spot patterns in the data, John does all the research for intense data posts. With a passion for data and research, he has been able to communicate these trends to partners and prospects.");
+
+            // build the request
+            var requestData = {};
+
+            // target audience level | 1,2,3,4,5 | optional | set to Knowledgeable by default
+            requestData["sophisticationBandId"] = client.sophisticationBandIdsArray["Knowledgeable"];
+
+            // service to process | selecting less services will be faster | each service takes time to process
+            requestData["serviceNamesArray"] =
+            [
+                'paragraph_density', // return paragraphDensityArray
+                'sentence_length',   // returns sentenceLengthIssuesArray
+                'spelling',          // returns issuesArray
+                'grammar',           // returns issuesArray
+                'readability',       // calculates Syntax / audience level of the text | automatically done if context / synonyms are enabled
+                'synonyms_v3',       // returns synonymsV3
+                'context',           // orders synonymsV3 by context on top
+                'urls'               // checks links in html
+            ];
+
+            // html is required for checking links
+            var addContentHtml = false;
+            if($.inArray('urls', requestData["serviceNamesArray"])!==-1)
+                addContentHtml = true;
+
+            var msTimeBetweenApiBursts = 150;
+            var processedDataArray = [];
+            var rtDocTotParagraphs = paragraphDataArray.length;
+
+            function doApiBurst(counter)
+            {
+                if(counter<=rtDocTotParagraphs)
+                {
+                    setTimeout(function()
+                    {
+                        $.each(paragraphDataArray, function(i, text)
+                        {
+                            if(typeof processedDataArray[i]!='undefined')
+                                return true; // continue;
+
+                            requestData["content"] = text;
+
+                            if(requestData["content"].length<10)
+                                return true; // continue; // too short
+
+                            // html is required for checking links | optional param
+                            if(addContentHtml)
+                                requestData["contentHtml"] = text;
+
+                            client.analyzeText(requestData, apiBurstProcessResp);
+
+                            processedDataArray[i] = true;
+                            return false; // break;;
+                        });
+
+                        counter++;
+
+                        doApiBurst(counter);
+
+                    }, msTimeBetweenApiBursts);
+                }
+            }
+
+            // start the document analysis
+            doApiBurst(0);
+
+            // process responses | called for each paragraph in the document
+            function apiBurstProcessResp(resp)
+            {
+                console.log('apiBurstProcessResp() ', resp);
+            }
+
+        }
+
+    });
+
+</script>
+
+</body>
+</html>
