@@ -1,4 +1,6 @@
 # Atomic-AI
+**Driven by Artificial Intelligence and applying advanced mathematics, linguistic analysis and machine learning technology, Atomic AI identifies and measures the impact of language on your marketing communications.** 
+
 Atomic Reach Developer Kit - API Libraries &amp; Prototypes
 
 This library allows you to connect to the Atomic AI platform.
