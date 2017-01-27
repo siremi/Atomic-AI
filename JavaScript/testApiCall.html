@@ -32,8 +32,10 @@
         client = arClient();
         // set delay interval between requests (ms)
         client.setDelayInterval(0);
+        // set debug verbose mode
+        client.setDebugMode(true);
         // identify with an app name
-        client.setAppName('AR_Prototype');
+        client.setAppName('TEST_APP');
         // issue / verify access tokens
         client.init(API_HOST, CONSUMER_KEY, CONSUMER_SECRET, callbackApiConnected);
 

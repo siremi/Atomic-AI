@@ -1,4 +1,4 @@
-# Atomic-AI with the PHP OAuth extension
+# Atomic-AI with the PECL PHP OAuth extension
 
 References:
 

@@ -1312,6 +1312,10 @@ function arClient() {
         clientAppName = newAppName;
     };
 
+    client.setDebugMode = function(bool) {
+        DEBUG_MODE = bool;
+    };
+
     function buildOauthParameter(options)
     {
         var ret = {
