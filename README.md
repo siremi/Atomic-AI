@@ -7,17 +7,17 @@ This collection of libraries allows you integrate with the **Atomic AI platform*
 
 You will need an **API key** (OAuth2 consumer key and secret). If you don't have a key, please request it from our website: https://www.atomicreach.com/try-it/
 
-## Prototypes
+## Prototype / Testing the API
 
-Each library contains prototypes that you can use to test and benchmark the API before integrating with your app.
+Each library contains prototype files that you can use to test and benchmark the API before integrating with your app.
 
-## /JavaScript library
+## [/JavaScript](https://github.com/siremi/Atomic-AI/tree/master/JavaScript)
 
 AR JavaScript client and dependencies. The prototypes can be run stand alone and do not require a server.
 
 Can be used to develop apps where the client connects directly to the Atomic AI platform.
 
-# /PHP/AR-Library library
+# [/PHP/AR-Library](https://github.com/siremi/Atomic-AI/tree/master/PHP/AR-Library)
 
 AR PHP Client library. Requires a server to run the PHP client. Can be used by Ajax apps.
 

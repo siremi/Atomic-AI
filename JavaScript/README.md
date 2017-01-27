@@ -1,4 +1,4 @@
-# Atomic-AI JavaScrip stand alone library 
+# Atomic-AI JavaScript stand alone library 
 
 - Add your API key to `ar_config.js` before running the prototypes
 - Run `testApiCall.html` for single paragraph analysis
