@@ -9,15 +9,20 @@ You will need an **API key** (OAuth2 consumer key and secret). If you don't have
 
 ## Prototypes
 
-Each library contains prototypes 
+Each library contains prototypes that you can use to test and benchmark the API before integrating with your app.
 
 ## /JavaScript library
 
-JavaScript client and dependencies. The prototypes can be run stand alone and do not require a server.
+AR JavaScript client and dependencies. The prototypes can be run stand alone and do not require a server.
 
 Can be used to develop apps where the client connects directly to the Atomic AI platform.
 
-# /PHP library
+# /PHP/AR-Library library
 
-PHP Client library. Requires a server to run the PHP client. Can be used by Ajax apps.
+AR PHP Client library. Requires a server to run the PHP client. Can be used by Ajax apps.
+
+# [/PHP/PECL-OAuth](https://github.com/siremi/Atomic-AI/tree/master/PHP/PECL-OAuth)
+
+Prototype using the PECL OAuth PHP extension to connect to the Atomic AI platform. Requires less dependencies.
+You will need to build your own client from the prototype provided with this method.
 
