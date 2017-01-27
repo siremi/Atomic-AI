@@ -3,7 +3,7 @@
 
 # Atomic Reach Developer Kit - API Libraries &amp; Prototypes
 
-This collection of libraries allows you integrate with the **Atomic AI platform** and perform real-time text analysis on any environment.
+This collection of libraries allows you integrate with the **Atomic AI platform** and perform real-time text analysis from any application.
 
 You will need an **API key** (OAuth2 consumer key and secret). If you don't have a key, please request it from our website: https://www.atomicreach.com/try-it/
 
