@@ -4,8 +4,9 @@ HOST: https://app.atomicreach.com
 # Atomic AI Platform
 
 Developers API Documentation
+http://docs.atomicreach.apiary.io
 
-## Real Time Analize Text API [/analyze-text/master]
+## Real Time Analyze Text API [/analyze-text/master]
 
 ### Analyze Text master [POST]
 
