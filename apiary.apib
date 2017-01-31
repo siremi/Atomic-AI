@@ -22,8 +22,8 @@ You can analyze a paragraph / text using this action. Supports multiple measures
                 "spelling",          // returns issuesArray
                 "grammar",           // returns issuesArray
                 "readability",       // calculates Syntax / audience level of the text | automatically done if context / synonyms are enabled
-                "synonyms_v3",       // returns synonymsV3
-                "context",           // orders synonymsV3 by context on top
+                "synonyms_v3",       // returns synonymsV3 by Context / best match on top
+                "keywords",          // returns keywordsArray
                 "urls"               // checks links in html | returns urlsArray
             ],
             "sophisticationBandId": 4, // target audience level | 1,2,3,4,5 | optional | set to Knowledgeable by default
@@ -39,12 +39,16 @@ You can analyze a paragraph / text using this action. Supports multiple measures
     + Body
 
             {
+                "status": 10, // OK
+                "detail": "TOO SIMPLE",         // TOO SIMPLE | TOO COMPLEX for the target audience | readability
+                "actual": "General",            // the actual audience of the paragraph | readability
+                "target": "Knowledgeable",      // the target audience of the paragraph | readability
                 "paragraphDensityArray": [...], // paragraph length issues
                 "sentenceLengthIssuesArray": [...],
-                "issuesArray": [...], // Spelling & Grammar issues
-                "keywordsArray": [...], // paragraph keywords detected
-                "synonymsV3": [...], // Synonyms, synset definitions, word emotional intensity
-                "urlsArray": [...], // valid / invalid links
+                "issuesArray": [...],           // Spelling & Grammar issues
+                "keywordsArray": [...],         // keywords detected in the paragraph
+                "synonymsV3": [...],            // Synonyms, synset definitions, word emotional intensity
+                "urlsArray": [...],             // valid / invalid links
             }
             
             
@@ -70,6 +74,7 @@ You can analyze a paragraph / text using this action. Supports multiple measures
     + Body
 
             {
+                "status": 10,
                 "paragraphDensityArray": 
                 {
                     "maxWordsPerParagraph": 
@@ -96,7 +101,7 @@ You can analyze a paragraph / text using this action. Supports multiple measures
         {
             "content": "Once there was a Czar who had three lovely daughters one day the three daughters went walking in the woods. They were enjoying themselves so much that they forgot the time and stayed too long a dragon kidnapped the three daughters. As they were being dragged off they cried for help. Three heroes heard their cries and set off to rescue the daughters. The heroes came and fought the dragon and rescued the maidens. Then the heroes returned the daughters to their palace. When the Czar heard of the rescue, he rewarded the heroes.",
             "serviceNamesArray": [
-                "sentenceLengthIssuesArray"
+                "sentence_length"
             ],
             "sophisticationBandId": 4,
         }
@@ -110,6 +115,7 @@ You can analyze a paragraph / text using this action. Supports multiple measures
     + Body
 
             {
+              "status": 10,
               "sentenceLengthIssuesArray":
               [
                 {
@@ -121,6 +127,112 @@ You can analyze a paragraph / text using this action. Supports multiple measures
                   "string": "kidnapped the three daughters",
                   "precontext": "",
                   "wordsCountOverload": 4
+                }
+              ]
+            }
+            
+
+### Spelling issues [POST]
+
++ Request (application/json)
+
+        {
+            "content": "Once there was a Czar who had three lovely daughsters. One day the three daughters went walking in the woods.They were enjoying themselves so much that they forgot the time and stayed too long. A dragon kidnapped the three daughters. As they were being dragged off they cried for help. Three heroes heard their cries and set off to rescue the daughters. The heroes came and fought the dragon and rescued the maidens. Then the heroes returned the daughters to their palace. When the Czar heard of the rescue, he rewarded the heroes.",
+            "serviceNamesArray": [
+                "spelling"
+            ],
+            "sophisticationBandId": 4,
+        }
+
++ Response 200 (application/json)
+
+    + Headers
+
+            Location: /analyze-text/master
+
+    + Body
+
+            {
+              "status": 10,
+              "issuesArray": [
+                {
+                  "string": "daughsters",
+                  "precontext": "lovely",
+                  "suggestions": [
+                    [
+                      "Possible spelling mistake found",
+                      [
+                        [
+                          "daughters"
+                        ]
+                      ]
+                    ]
+                  ],
+                  "type": "spelling"
+                },
+                {
+                  "string": "They",
+                  "precontext": "woods.",
+                  "suggestions": [
+                    [
+                      "Add a space between sentences",
+                      [
+                        [
+                          " They"
+                        ]
+                      ]
+                    ]
+                  ],
+                  "type": "spelling"
+                }
+              ]
+            }
+            
+
+### Grammar issues [POST]
+
++ Request (application/json)
+
+        {
+            "content": "Once there was a Czar who had three lovely daughters. One day the three daughters went walking in the woods. They were enjoying themselves so much that they forgot the time and stayed too long. A dragon kidnapped the three daughters. As they were being dragged off they cried for help. Three heroes heard their cries and set off to rescue the daughters. The heroes came and fought the dragon and rescued the maidens. Then the heroes returned the daughters to their palace. When the Czar heard of the rescue, he rewarded the heroes.",
+            "serviceNamesArray": [
+                "grammar"
+            ],
+            "sophisticationBandId": 4,
+        }
+
++ Response 200 (application/json)
+
+    + Headers
+
+            Location: /analyze-text/master
+
+    + Body
+
+            {
+              "status": 10,
+              "issuesArray": [
+                {
+                  "string": "Once",
+                  "precontext": "",
+                  "suggestions": [
+                    [
+                      "\u201cOnce\u201d at the beginning of a sentence requires a 2nd clause. Maybe a comma, question or exclamation mark is missing, or the sentence is incomplete and should be joined with the following sentence. ",
+                      []
+                    ]
+                  ],
+                  "type": "grammar"
+                },
+                {
+                  "string": "were being dragged",
+                  "precontext": "they",
+                  "suggestions": [
+                    [
+                      "Passive voice",
+                      []
+                    ]
+                  ],
+                  "type": "grammar"
                 }
               ]
             }
