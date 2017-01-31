@@ -26,3 +26,8 @@ AR PHP Client library. Requires a server to run the PHP client. Can be used by A
 Prototype using the PECL OAuth PHP extension to connect to the Atomic AI platform. Requires less dependencies.
 You will need to build your own client from the prototype provided with this method.
 
+## Developers API Documentation 
+
+More detailed documentation on parameters and response with examples: 
+Available at: http://docs.atomicreach.apiary.io
+
