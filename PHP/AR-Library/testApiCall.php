@@ -55,6 +55,9 @@ $responseJsonObj = $atomic_reach->analyzeText($requestArray);
 echo "Reading response: \n<BR>";
 echo "<pre>",print_r($responseJsonObj),"</pre>";
 
+// OR
+// echo "<pre>",json_encode($responseJsonObj),"</pre>";
+
 if(defined("START_TIME"))
 	echo "\n\n<BR><BR>Time: ".number_format(getmicrotime()-$startTime,4)." seconds";
 

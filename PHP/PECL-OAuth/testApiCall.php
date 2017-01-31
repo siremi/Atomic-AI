@@ -110,6 +110,9 @@ $responseJsonStr = $oauth->getLastResponse();
 $responseArray = json_decode($responseJsonStr, true);
 echo "<pre>",print_r($responseArray),"</pre>";
 
+// OR
+// echo "<pre>",json_encode($responseJsonObj),"</pre>";
+
 if(defined("START_TIME"))
 	echo "\n\n<BR><BR>Time: ".number_format(getmicrotime()-$startTime,4)." seconds";
 
