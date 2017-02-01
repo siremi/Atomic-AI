@@ -22,8 +22,8 @@ You can analyze a paragraph / text using this action. Supports multiple measures
                 "spelling",          // returns issuesArray
                 "grammar",           // returns issuesArray
                 "readability",       // calculates Syntax / audience level of the text | automatically done if context / synonyms are enabled
-                "synonyms_v3",       // returns synonymsV3 by Context / best match on top
                 "keywords",          // returns keywordsArray
+                "synonyms_v3",       // returns synonymsV3 by Context / best match on top
                 "urls"               // checks links in html | returns urlsArray
             ],
             "sophisticationBandId": 4, // target audience level | 1,2,3,4,5 | optional | set to Knowledgeable by default
@@ -39,7 +39,7 @@ You can analyze a paragraph / text using this action. Supports multiple measures
     + Body
 
             {
-                "status": 10, // OK
+                "status": 10,                   // OK
                 "detail": "TOO SIMPLE",         // TOO SIMPLE | TOO COMPLEX for the target audience | readability
                 "actual": "General",            // the actual audience of the paragraph | readability
                 "target": "Knowledgeable",      // the target audience of the paragraph | readability
@@ -47,7 +47,7 @@ You can analyze a paragraph / text using this action. Supports multiple measures
                 "sentenceLengthIssuesArray": [...],
                 "issuesArray": [...],           // Spelling & Grammar issues
                 "keywordsArray": [...],         // keywords detected in the paragraph
-                "synonymsV3": [...],            // Synonyms, synset definitions, word emotional intensity
+                "synonymsV3": [...],            // Synonyms, synset definitions, word emotion / intensity
                 "urlsArray": [...],             // valid / invalid links
             }
             
@@ -235,4 +235,71 @@ You can analyze a paragraph / text using this action. Supports multiple measures
                   "type": "grammar"
                 }
               ]
+            }
+
+
+### Key words [POST]
+
++ Request (application/json)
+
+        {
+            "content": "Once there was a Czar who had three lovely daughters. One day the three daughters went walking in the woods. They were enjoying themselves so much that they forgot the time and stayed too long. A dragon kidnapped the three daughters. As they were being dragged off they cried for help. Three heroes heard their cries and set off to rescue the daughters. The heroes came and fought the dragon and rescued the maidens. Then the heroes returned the daughters to their palace. When the Czar heard of the rescue, he rewarded the heroes.",
+            "serviceNamesArray": [
+                "keywords"
+            ],
+            "sophisticationBandId": 4,
+        }
+
++ Response 200 (application/json)
+
+    + Headers
+
+            Location: /analyze-text/master
+
+    + Body
+
+            {
+              "status": 10,
+              "keywordsArray": [
+                "daughters",
+                "Czar",
+                "heroes",
+                "dragon"
+              ]
+            }
+
+
+### Contextual Synonym suggestions [POST]
+
++ Request (application/json)
+
+        {
+            "content": "Once there was a Czar who had three lovely daughters. One day the three daughters went walking in the woods. They were enjoying themselves so much that they forgot the time and stayed too long. A dragon kidnapped the three daughters. As they were being dragged off they cried for help. Three heroes heard their cries and set off to rescue the daughters. The heroes came and fought the dragon and rescued the maidens. Then the heroes returned the daughters to their palace. When the Czar heard of the rescue, he rewarded the heroes.",
+            "serviceNamesArray": [
+                "synonyms_v3"
+            ],
+            "sophisticationBandId": 4,
+        }
+
++ Response 200 (application/json)
+
+    + Headers
+
+            Location: /analyze-text/master
+
+    + Body
+
+            {
+              "status": 10,
+              "synonymsV3": {
+                "synAll": [...],                     // all synonym syggestions
+                "synLowerAudience": ["..."],         // suggestions to Decrease the audience level of the text
+                "synSameAudience": ["..."],          // suggestions to keep the same the audience level
+                "synHigherAudience": ["..."],        // suggestions to Increase the audience level
+                "synAllByEm": ["..."],               // all synonyms ordered by Emotion / Intensity
+                "synEmotionLowerAudience": ["..."],  // decrease audience, by Emotion / Intensity
+                "synEmotionSameAudience": ["..."],   // keep same audience, by Emotion / Intensity
+                "synEmotionHigherAudience": ["..."], // increase audience, by Emotion / Intensity
+                "synEmotionAdvAdj": ["..."]          // Adverbs / Adjectives, by Emotion / Intensity
+              }
             }
