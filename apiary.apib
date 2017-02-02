@@ -62,7 +62,7 @@ You can analyze a paragraph / text using this action. Supports multiple measures
             "serviceNamesArray": [
                 "paragraph_density"
             ],
-            "sophisticationBandId": 4,
+            "sophisticationBandId": 4
         }
 
 + Response 200 (application/json)
@@ -103,7 +103,7 @@ You can analyze a paragraph / text using this action. Supports multiple measures
             "serviceNamesArray": [
                 "sentence_length"
             ],
-            "sophisticationBandId": 4,
+            "sophisticationBandId": 4
         }
 
 + Response 200 (application/json)
@@ -141,7 +141,7 @@ You can analyze a paragraph / text using this action. Supports multiple measures
             "serviceNamesArray": [
                 "spelling"
             ],
-            "sophisticationBandId": 4,
+            "sophisticationBandId": 4
         }
 
 + Response 200 (application/json)
@@ -198,7 +198,7 @@ You can analyze a paragraph / text using this action. Supports multiple measures
             "serviceNamesArray": [
                 "grammar"
             ],
-            "sophisticationBandId": 4,
+            "sophisticationBandId": 4
         }
 
 + Response 200 (application/json)
@@ -238,7 +238,7 @@ You can analyze a paragraph / text using this action. Supports multiple measures
             }
 
 
-### Key words [POST]
+### Keywords [POST]
 
 + Request (application/json)
 
@@ -247,7 +247,7 @@ You can analyze a paragraph / text using this action. Supports multiple measures
             "serviceNamesArray": [
                 "keywords"
             ],
-            "sophisticationBandId": 4,
+            "sophisticationBandId": 4
         }
 
 + Response 200 (application/json)
@@ -274,11 +274,11 @@ You can analyze a paragraph / text using this action. Supports multiple measures
 + Request (application/json)
 
         {
-            "content": "Once there was a Czar who had three lovely daughters. One day the three daughters went walking in the woods. They were enjoying themselves so much that they forgot the time and stayed too long. A dragon kidnapped the three daughters. As they were being dragged off they cried for help. Three heroes heard their cries and set off to rescue the daughters. The heroes came and fought the dragon and rescued the maidens. Then the heroes returned the daughters to their palace. When the Czar heard of the rescue, he rewarded the heroes.",
+            "content": "We test the test site and it looks good.",
             "serviceNamesArray": [
                 "synonyms_v3"
             ],
-            "sophisticationBandId": 4,
+            "sophisticationBandId": 4
         }
 
 + Response 200 (application/json)
@@ -292,14 +292,250 @@ You can analyze a paragraph / text using this action. Supports multiple measures
             {
               "status": 10,
               "synonymsV3": {
-                "synAll": [...],                     // all synonym syggestions
-                "synLowerAudience": ["..."],         // suggestions to Decrease the audience level of the text
-                "synSameAudience": ["..."],          // suggestions to keep the same the audience level
-                "synHigherAudience": ["..."],        // suggestions to Increase the audience level
-                "synAllByEm": ["..."],               // all synonyms ordered by Emotion / Intensity
-                "synEmotionLowerAudience": ["..."],  // decrease audience, by Emotion / Intensity
-                "synEmotionSameAudience": ["..."],   // keep same audience, by Emotion / Intensity
-                "synEmotionHigherAudience": ["..."], // increase audience, by Emotion / Intensity
-                "synEmotionAdvAdj": ["..."]          // Adverbs / Adjectives, by Emotion / Intensity
+                "synAll": [...],                   // all synonym syggestions
+                "synLowerAudience": [...],         // suggestions to Decrease the audience level of the text
+                "synSameAudience": [...],          // suggestions to keep the same the audience level
+                "synHigherAudience": [...],        // suggestions to Increase the audience level
+                "synAllByEm": [...],               // all synonyms ordered by Emotion / Intensity
+                "synEmotionLowerAudience": [...],  // decrease audience, by Emotion / Intensity
+                "synEmotionSameAudience": [...],   // keep same audience, by Emotion / Intensity
+                "synEmotionHigherAudience": [...], // increase audience, by Emotion / Intensity
+                "synEmotionAdvAdj": [...]          // Adverbs / Adjectives, by Emotion / Intensity
               }
+            }
+
+    
+### Synonyms response explained [POST]
+
++ Request (application/json)
+
+        {
+            "content": "We test the test site and it looks good.",
+            "serviceNamesArray": [
+                "synonyms_v3"
+            ],
+            "sophisticationBandId": 4
+        }
+
++ Response 200 (application/json)
+
+    + Headers
+
+            Location: /analyze-text/master
+
+    + Body
+
+    {
+        "synAll": [ // all synonyms response array | contains all paragraphs processed, each paragraph as an object
+            
+            { // first paragraph object
+            
+                "test": 
+                [ // first word we can offer suggestions for
+                  // if the word appears multiple times within the text, this array will contain additional items
+                  // in this case, the word is a Verb at the first occurrence, then a Noun on the second occurrence
+                
+                  [ // first occurrence of the word in the paragraph | we've determined the word is a VERB
+                    
+                    [ // first synonym set suggestion | this is a ranking as well, with the sets on top as most relevant
+                    
+                      "determine the result of (a competition)", // the definition on the synonym set
+                      
+                      [ // the collection of words in this synonym set | we might find multiple matches with the same set
+                        [ // first suggested word for replacement
+                          "judge"
+                        ]
+                      ]
+                    ],
+                    [ // second synonym set
+                    
+                      "establish after a calculation, investigation, experiment, survey, or study",
+                      [
+                        // we found 3 words in this set that might work
+                        [
+                          "determine"
+                        ],
+                        [
+                          "ascertain"
+                        ],
+                        [
+                          "find out"
+                        ]
+                      ]
+                    ],
+                    ["..."] // other suggestions follow
+                    
+                  ], // end first occurrence
+                  
+                  [ // second occurrence | we've determined the word is a NOUN this time...
+                  
+                    [
+                      "the act of examining something closely (as for mistakes)",
+                      [
+                        [
+                          "examination"
+                        ]
+                      ]
+                    ],
+                    [
+                      "a set of questions or exercises evaluating skill or knowledge",
+                      [
+                        [
+                          "exam"
+                        ]
+                      ]
+                    ],
+                    ["..."] // other suggestions follow
+
+                  ] // end second occurrence
+                
+                ], // end first word
+                
+                "site": 
+                [ // the second word we can offer suggestions
+                 [ // first occurrence
+                    [
+                      "a point located with respect to surface features of some region",
+                      [
+                        [
+                          "place"
+                        ]
+                      ]
+                    ],
+                    [
+                      "a computer connected to the internet that maintains a series of web pages on the World Wide Web",
+                      [
+                        [
+                          "website"
+                        ],
+                        [
+                          "web site"
+                        ]
+                      ]
+                    ],
+                    ["..."] // other sets follow...
+                 ]
+                ],
+                "looks": ["..."],
+                "good": ["..."]
+            } 
+        ],
+        // the response for the other synonym measures is in the same format as above
+        "synLowerAudience": ["..."],
+        "synSameAudience": ["..."],
+        "synHigherAudience": ["..."],
+        "synAllByEm": [
+            {
+                "test":  
+                [
+                    [ // first occurrence | VERB
+                        [
+                          "gain points in a game",
+                          [
+                            [
+                              "score",
+                              "+"      // + means more word emotion / intensity, while - means less intensity
+                            ]
+                          ]
+                        ],
+                        [
+                          "examine someone's knowledge of something",
+                          [
+                            [
+                              "quiz",
+                              "+"     // + | -
+                            ]
+                          ]
+                        ],
+                        ["..."]
+                    ],
+                    [ // second occurrence | NOUN
+                        [
+                          "an examination consisting of a few short questions",
+                          [
+                            [
+                              "quiz",
+                              "+"      // + | -
+                            ]
+                          ]
+                        ],
+                        [
+                          "the act of examining something closely (as for mistakes)",
+                          [
+                            [
+                              "examination",
+                              "+"
+                            ]
+                          ]
+                        ],
+                        ["..."]
+                    ]
+                ],
+                "site": 
+                [
+                 [
+                    [
+                      "the act of digging",
+                      [
+                        [
+                          "excavation",
+                          "+"            // + means more word emotion / intensity, while - means less intensity
+                        ]
+                      ]
+                    ],
+                    [
+                      "a point located with respect to surface features of some region",
+                      [
+                        [
+                          "place",
+                          "-"          // - means less emotion / intensity here
+                        ]
+                      ]
+                    ],
+                    ["..."] // other sets follow...
+                 ]
+                ],
+                "looks": ["..."],
+                "good": ["..."]
+                
+            }
+        ],
+        "synEmotionLowerAudience": ["..."],
+        "synEmotionSameAudience": ["..."],
+        "synEmotionHigherAudience": ["..."],
+        "synEmotionAdvAdj": ["..."]
+    }
+
+
+### Check links / urls [POST]
+
++ Request (application/json)
+
+        {
+            "contentHtml": "We test the test site and it looks good. <a href='https://www.googlebroken.com'>broken link</a> <a href='http://www.atomicreach.com/blog/'>good link</a>",
+            "serviceNamesArray": [
+                "urls"
+            ]
+        }
+
++ Response 200 (application/json)
+
+    + Headers
+
+            Location: /analyze-text/master
+
+    + Body
+
+            {
+              "status": 10,
+              "urlsArray": [
+                {
+                  "url": "https:\/\/www.googlebroken.com",
+                  "valid": false
+                },
+                {
+                  "url": "http:\/\/www.atomicreach.com\/blog\/",
+                  "valid": true
+                }
+              ]
             }
