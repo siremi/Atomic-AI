@@ -539,3 +539,44 @@ You can analyze a paragraph / text using this action. Supports multiple measures
                 }
               ]
             }
+            
+            
+## Document / Readability [/analyze-text/get-readability]
+
+Analize the readability of a document / text. Can be used to indentify the audience level of a whole document to get a global reference.
+
+
+### /get-readability [POST]
+
+Send either 'documentDataArray' or 'content'. It is important to specify the paragraphs to the API in order to get an accurate audience level.
+
+'documentDataArray' should be an array of text values, witch each item containing a paragraph text.
+
+'contentHtml' should be a block of text containting the tag \<p\>\</p\> for each paragraph. Optionally, you can send full HTML here, but it's not as efficient.
+
++ Request (application/json)
+
+        {
+            "documentDataArray": [
+                "Creating assets that they can print out or physically use in their own strategy proves to increase the value of your ebook.",
+                "Provide them with the tools and resources to help them take action.",
+                "This strategy can also create an opening to naturally add your tool/product to the ebook."
+            ],
+            "contentHtml": "<p>Creating assets that they can print out or physically use in their own strategy proves to increase the value of your ebook.</p><p>Provide them with the tools and resources to help them take action.</p><p>This strategy can also create an opening to naturally add your tool/product to the ebook.</p>",
+            "sophisticationBandId": 5
+        }
+
++ Response 200 (application/json)
+
+    + Headers
+
+            Location: /analyze-text/get-readability
+
+    + Body
+
+            {
+                "status": 10,
+                "detail": "TOO SIMPLE",
+                "actual": "Knowledgeable",
+                "target": "General"
+            }
