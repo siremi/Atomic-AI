@@ -22,8 +22,8 @@ You can analyze a paragraph / text using this action. Supports multiple measures
                 "spelling",          // returns issuesArray
                 "grammar",           // returns issuesArray
                 "readability",       // calculates Syntax / audience level of the text | automatically done if context / synonyms are enabled
-                "synonyms_v3",       // returns synonymsV3
-                "context",           // orders synonymsV3 by context on top
+                "keywords",          // returns keywordsArray
+                "synonyms_v3",       // returns synonymsV3 by Context / best match on top
                 "urls"               // checks links in html | returns urlsArray
             ],
             "sophisticationBandId": 4, // target audience level | 1,2,3,4,5 | optional | set to Knowledgeable by default
@@ -39,12 +39,16 @@ You can analyze a paragraph / text using this action. Supports multiple measures
     + Body
 
             {
+                "status": 10,                   // OK
+                "detail": "TOO SIMPLE",         // TOO SIMPLE | TOO COMPLEX for the target audience | readability
+                "actual": "General",            // the actual audience of the paragraph | readability
+                "target": "Knowledgeable",      // the target audience of the paragraph | readability
                 "paragraphDensityArray": [...], // paragraph length issues
                 "sentenceLengthIssuesArray": [...],
-                "issuesArray": [...], // Spelling & Grammar issues
-                "keywordsArray": [...], // paragraph keywords detected
-                "synonymsV3": [...], // Synonyms, synset definitions, word emotional intensity
-                "urlsArray": [...], // valid / invalid links
+                "issuesArray": [...],           // Spelling & Grammar issues
+                "keywordsArray": [...],         // keywords detected in the paragraph
+                "synonymsV3": [...],            // Synonyms, synset definitions, word emotion / intensity
+                "urlsArray": [...],             // valid / invalid links
             }
             
             
@@ -58,7 +62,7 @@ You can analyze a paragraph / text using this action. Supports multiple measures
             "serviceNamesArray": [
                 "paragraph_density"
             ],
-            "sophisticationBandId": 4,
+            "sophisticationBandId": 4
         }
 
 + Response 200 (application/json)
@@ -70,6 +74,7 @@ You can analyze a paragraph / text using this action. Supports multiple measures
     + Body
 
             {
+                "status": 10,
                 "paragraphDensityArray": 
                 {
                     "maxWordsPerParagraph": 
@@ -96,9 +101,9 @@ You can analyze a paragraph / text using this action. Supports multiple measures
         {
             "content": "Once there was a Czar who had three lovely daughters one day the three daughters went walking in the woods. They were enjoying themselves so much that they forgot the time and stayed too long a dragon kidnapped the three daughters. As they were being dragged off they cried for help. Three heroes heard their cries and set off to rescue the daughters. The heroes came and fought the dragon and rescued the maidens. Then the heroes returned the daughters to their palace. When the Czar heard of the rescue, he rewarded the heroes.",
             "serviceNamesArray": [
-                "sentenceLengthIssuesArray"
+                "sentence_length"
             ],
-            "sophisticationBandId": 4,
+            "sophisticationBandId": 4
         }
 
 + Response 200 (application/json)
@@ -110,6 +115,7 @@ You can analyze a paragraph / text using this action. Supports multiple measures
     + Body
 
             {
+              "status": 10,
               "sentenceLengthIssuesArray":
               [
                 {
@@ -125,4 +131,452 @@ You can analyze a paragraph / text using this action. Supports multiple measures
               ]
             }
             
+
+### Spelling issues [POST]
+
++ Request (application/json)
+
+        {
+            "content": "Once there was a Czar who had three lovely daughsters. One day the three daughters went walking in the woods.They were enjoying themselves so much that they forgot the time and stayed too long. A dragon kidnapped the three daughters. As they were being dragged off they cried for help. Three heroes heard their cries and set off to rescue the daughters. The heroes came and fought the dragon and rescued the maidens. Then the heroes returned the daughters to their palace. When the Czar heard of the rescue, he rewarded the heroes.",
+            "serviceNamesArray": [
+                "spelling"
+            ],
+            "sophisticationBandId": 4
+        }
+
++ Response 200 (application/json)
+
+    + Headers
+
+            Location: /analyze-text/master
+
+    + Body
+
+            {
+              "status": 10,
+              "issuesArray": [
+                {
+                  "string": "daughsters",
+                  "precontext": "lovely",
+                  "suggestions": [
+                    [
+                      "Possible spelling mistake found",
+                      [
+                        [
+                          "daughters"
+                        ]
+                      ]
+                    ]
+                  ],
+                  "type": "spelling"
+                },
+                {
+                  "string": "They",
+                  "precontext": "woods.",
+                  "suggestions": [
+                    [
+                      "Add a space between sentences",
+                      [
+                        [
+                          " They"
+                        ]
+                      ]
+                    ]
+                  ],
+                  "type": "spelling"
+                }
+              ]
+            }
             
+
+### Grammar issues [POST]
+
++ Request (application/json)
+
+        {
+            "content": "Once there was a Czar who had three lovely daughters. One day the three daughters went walking in the woods. They were enjoying themselves so much that they forgot the time and stayed too long. A dragon kidnapped the three daughters. As they were being dragged off they cried for help. Three heroes heard their cries and set off to rescue the daughters. The heroes came and fought the dragon and rescued the maidens. Then the heroes returned the daughters to their palace. When the Czar heard of the rescue, he rewarded the heroes.",
+            "serviceNamesArray": [
+                "grammar"
+            ],
+            "sophisticationBandId": 4
+        }
+
++ Response 200 (application/json)
+
+    + Headers
+
+            Location: /analyze-text/master
+
+    + Body
+
+            {
+              "status": 10,
+              "issuesArray": [
+                {
+                  "string": "Once",
+                  "precontext": "",
+                  "suggestions": [
+                    [
+                      "\u201cOnce\u201d at the beginning of a sentence requires a 2nd clause. Maybe a comma, question or exclamation mark is missing, or the sentence is incomplete and should be joined with the following sentence. ",
+                      []
+                    ]
+                  ],
+                  "type": "grammar"
+                },
+                {
+                  "string": "were being dragged",
+                  "precontext": "they",
+                  "suggestions": [
+                    [
+                      "Passive voice",
+                      []
+                    ]
+                  ],
+                  "type": "grammar"
+                }
+              ]
+            }
+
+
+### Keywords [POST]
+
++ Request (application/json)
+
+        {
+            "content": "Once there was a Czar who had three lovely daughters. One day the three daughters went walking in the woods. They were enjoying themselves so much that they forgot the time and stayed too long. A dragon kidnapped the three daughters. As they were being dragged off they cried for help. Three heroes heard their cries and set off to rescue the daughters. The heroes came and fought the dragon and rescued the maidens. Then the heroes returned the daughters to their palace. When the Czar heard of the rescue, he rewarded the heroes.",
+            "serviceNamesArray": [
+                "keywords"
+            ],
+            "sophisticationBandId": 4
+        }
+
++ Response 200 (application/json)
+
+    + Headers
+
+            Location: /analyze-text/master
+
+    + Body
+
+            {
+              "status": 10,
+              "keywordsArray": [
+                "daughters",
+                "Czar",
+                "heroes",
+                "dragon"
+              ]
+            }
+
+
+### Contextual Synonym suggestions [POST]
+
++ Request (application/json)
+
+        {
+            "content": "We test the test site and it looks good.",
+            "serviceNamesArray": [
+                "synonyms_v3"
+            ],
+            "sophisticationBandId": 4
+        }
+
++ Response 200 (application/json)
+
+    + Headers
+
+            Location: /analyze-text/master
+
+    + Body
+
+            {
+              "status": 10,
+              "synonymsV3": {
+                "synAll": [...],                   // all synonym syggestions
+                "synLowerAudience": [...],         // suggestions to Decrease the audience level of the text
+                "synSameAudience": [...],          // suggestions to keep the same the audience level
+                "synHigherAudience": [...],        // suggestions to Increase the audience level
+                "synAllByEm": [...],               // all synonyms ordered by Emotion / Intensity
+                "synEmotionLowerAudience": [...],  // decrease audience, by Emotion / Intensity
+                "synEmotionSameAudience": [...],   // keep same audience, by Emotion / Intensity
+                "synEmotionHigherAudience": [...], // increase audience, by Emotion / Intensity
+                "synEmotionAdvAdj": [...]          // Adverbs / Adjectives, by Emotion / Intensity
+              }
+            }
+
+    
+### Synonyms response explained [POST]
+
++ Request (application/json)
+
+        {
+            "content": "We test the test site and it looks good.",
+            "serviceNamesArray": [
+                "synonyms_v3"
+            ],
+            "sophisticationBandId": 4
+        }
+
++ Response 200 (application/json)
+
+    + Headers
+
+            Location: /analyze-text/master
+
+    + Body
+
+    {
+        "synAll": [ // all synonyms response array | contains all paragraphs processed, each paragraph as an object
+            
+            { // first paragraph object
+            
+                "test": 
+                [ // first word we can offer suggestions for
+                  // if the word appears multiple times within the text, this array will contain additional items
+                  // in this case, the word is a Verb at the first occurrence, then a Noun on the second occurrence
+                
+                  [ // first occurrence of the word in the paragraph | we've determined the word is a VERB
+                    
+                    [ // first synonym set suggestion | this is a ranking as well, with the sets on top as most relevant
+                    
+                      "determine the result of (a competition)", // the definition on the synonym set
+                      
+                      [ // the collection of words in this synonym set | we might find multiple matches with the same set
+                        [ // first suggested word for replacement
+                          "judge"
+                        ]
+                      ]
+                    ],
+                    [ // second synonym set
+                    
+                      "establish after a calculation, investigation, experiment, survey, or study",
+                      [
+                        // we found 3 words in this set that might work
+                        [
+                          "determine"
+                        ],
+                        [
+                          "ascertain"
+                        ],
+                        [
+                          "find out"
+                        ]
+                      ]
+                    ],
+                    ["..."] // other suggestions follow
+                    
+                  ], // end first occurrence
+                  
+                  [ // second occurrence | we've determined the word is a NOUN this time...
+                  
+                    [
+                      "the act of examining something closely (as for mistakes)",
+                      [
+                        [
+                          "examination"
+                        ]
+                      ]
+                    ],
+                    [
+                      "a set of questions or exercises evaluating skill or knowledge",
+                      [
+                        [
+                          "exam"
+                        ]
+                      ]
+                    ],
+                    ["..."] // other suggestions follow
+
+                  ] // end second occurrence
+                
+                ], // end first word
+                
+                "site": 
+                [ // the second word we can offer suggestions
+                 [ // first occurrence
+                    [
+                      "a point located with respect to surface features of some region",
+                      [
+                        [
+                          "place"
+                        ]
+                      ]
+                    ],
+                    [
+                      "a computer connected to the internet that maintains a series of web pages on the World Wide Web",
+                      [
+                        [
+                          "website"
+                        ],
+                        [
+                          "web site"
+                        ]
+                      ]
+                    ],
+                    ["..."] // other sets follow...
+                 ]
+                ],
+                "looks": ["..."],
+                "good": ["..."]
+            } 
+        ],
+        // the response for the other synonym measures is in the same format as above
+        "synLowerAudience": ["..."],
+        "synSameAudience": ["..."],
+        "synHigherAudience": ["..."],
+        "synAllByEm": [
+            {
+                "test":  
+                [
+                    [ // first occurrence | VERB
+                        [
+                          "gain points in a game",
+                          [
+                            [
+                              "score",
+                              "+"      // + means more word emotion / intensity, while - means less intensity
+                            ]
+                          ]
+                        ],
+                        [
+                          "examine someone's knowledge of something",
+                          [
+                            [
+                              "quiz",
+                              "+"     // + | -
+                            ]
+                          ]
+                        ],
+                        ["..."]
+                    ],
+                    [ // second occurrence | NOUN
+                        [
+                          "an examination consisting of a few short questions",
+                          [
+                            [
+                              "quiz",
+                              "+"      // + | -
+                            ]
+                          ]
+                        ],
+                        [
+                          "the act of examining something closely (as for mistakes)",
+                          [
+                            [
+                              "examination",
+                              "+"
+                            ]
+                          ]
+                        ],
+                        ["..."]
+                    ]
+                ],
+                "site": 
+                [
+                 [
+                    [
+                      "the act of digging",
+                      [
+                        [
+                          "excavation",
+                          "+"            // + means more word emotion / intensity, while - means less intensity
+                        ]
+                      ]
+                    ],
+                    [
+                      "a point located with respect to surface features of some region",
+                      [
+                        [
+                          "place",
+                          "-"          // - means less emotion / intensity here
+                        ]
+                      ]
+                    ],
+                    ["..."] // other sets follow...
+                 ]
+                ],
+                "looks": ["..."],
+                "good": ["..."]
+                
+            }
+        ],
+        "synEmotionLowerAudience": ["..."],
+        "synEmotionSameAudience": ["..."],
+        "synEmotionHigherAudience": ["..."],
+        "synEmotionAdvAdj": ["..."]
+    }
+
+
+### Check links / urls [POST]
+
++ Request (application/json)
+
+        {
+            "contentHtml": "We test the test site and it looks good. <a href='https://www.googlebroken.com'>broken link</a> <a href='http://www.atomicreach.com/blog/'>good link</a>",
+            "serviceNamesArray": [
+                "urls"
+            ]
+        }
+
++ Response 200 (application/json)
+
+    + Headers
+
+            Location: /analyze-text/master
+
+    + Body
+
+            {
+              "status": 10,
+              "urlsArray": [
+                {
+                  "url": "https:\/\/www.googlebroken.com",
+                  "valid": false
+                },
+                {
+                  "url": "http:\/\/www.atomicreach.com\/blog\/",
+                  "valid": true
+                }
+              ]
+            }
+            
+            
+## Document / Readability [/analyze-text/get-readability]
+
+Analyze the readability of a document / text. Can be used to identify the audience level of a whole document to get a global reference.
+
+
+### /get-readability [POST]
+
+Send either 'documentDataArray' or 'content'. It is important to specify the paragraphs to the API in order to get an accurate audience level.
+
+'documentDataArray' should be an array of text values, witch each item containing a paragraph text.
+
+'contentHtml' should be a block of text containing the tag \<p\>\</p\> for each paragraph. Optionally, you can send full HTML here, but it's not as efficient.
+
++ Request (application/json)
+
+        {
+            "documentDataArray": [
+                "Creating assets that they can print out or physically use in their own strategy proves to increase the value of your ebook.",
+                "Provide them with the tools and resources to help them take action.",
+                "This strategy can also create an opening to naturally add your tool/product to the ebook."
+            ],
+            "contentHtml": "<p>Creating assets that they can print out or physically use in their own strategy proves to increase the value of your ebook.</p><p>Provide them with the tools and resources to help them take action.</p><p>This strategy can also create an opening to naturally add your tool/product to the ebook.</p>",
+            "sophisticationBandId": 5
+        }
+
++ Response 200 (application/json)
+
+    + Headers
+
+            Location: /analyze-text/get-readability
+
+    + Body
+
+            {
+                "status": 10,
+                "detail": "TOO SIMPLE",
+                "actual": "Knowledgeable",
+                "target": "General"
+            }
