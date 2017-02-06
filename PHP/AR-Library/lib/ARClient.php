@@ -527,6 +527,14 @@ class AR_Client {
 			foreach($requestDataArray as $key => $value)
 				$requestDataArray[$key] = json_encode($value);
 		}
+		else
+		{
+			foreach($requestDataArray as $key => $value)
+			{
+				if(is_array($value))
+					$requestDataArray[$key] = json_encode($value);
+			}
+		}
 
 		return $this->doRequest($service, $requestDataArray, $method);
 	}
