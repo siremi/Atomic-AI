@@ -15,6 +15,7 @@ class AR_Client {
 	protected $logRequests = false;
 	protected $creationTime = 0;
 	protected $status;
+	protected $clientAppName = "API_PHP_Client";
 
 	var $host;
 	var $key;
@@ -113,6 +114,12 @@ class AR_Client {
 	public function setDebugMode($bool)
 	{
 		$this->logRequests = $bool;
+		return;
+	}
+
+	public function setAppName($appName)
+	{
+		$this->clientAppName = $appName;
 		return;
 	}
 
@@ -237,7 +244,12 @@ class AR_Client {
 		if($this->isError)
 			return $this->getErrorMessage();
 
-		foreach ($data as $key => $value) $data[$key] = is_null($value) ? "" : urlencode($value);
+		foreach ($data as $key => $value)
+			$data[$key] = is_null($value) ? "" : urlencode($value);
+
+		// add application name
+		$data["app_name"] = $this->clientAppName;
+
 		$consumer = new ClientOAuthConsumer($this->key, $this->secret, NULL);
 		$token = new ClientOAuthConsumer($this->get_oauth_token(), $this->get_oauth_token_secret(), 1);
 		$endpoint = $this->host . $service;

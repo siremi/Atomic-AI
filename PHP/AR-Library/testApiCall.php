@@ -21,6 +21,7 @@ if(!require_once "lib/ARClient.php")
 $atomic_reach = new AR_Client(API_HOST,CONSUMER_KEY,CONSUMER_SECRET);
 $atomic_reach->init();
 $atomic_reach->setDebugMode(true);
+$atomic_reach->setAppName("TEST");
 
 $requestArray = array();
 
