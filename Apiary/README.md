@@ -548,7 +548,7 @@ Analyze the readability of a document / text. Can be used to identify the audien
 
 ### /get-readability [POST]
 
-Send either 'documentDataArray' or 'contentHtml'. It is important to specify the paragraphs to the API in order to get an accurate audience level.
+Send either 'documentDataArray' | 'contentHtml' | 'content'. It is important to specify the paragraphs to the API in order to get an accurate audience level.
 
 'documentDataArray' should be an array of text values, witch each item containing a paragraph text.
 
@@ -576,7 +576,7 @@ Send either 'documentDataArray' or 'contentHtml'. It is important to specify the
 
             {
                 "status": 10,
-                "detail": "TOO SIMPLE",
+                "detail": "TOO SIMPLE", // "TOO SIMPLE" | "TOO COMPLEX" | "HIT"
                 "actual": "Knowledgeable",
                 "target": "General"
             }
