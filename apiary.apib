@@ -548,7 +548,7 @@ Analyze the readability of a document / text. Can be used to identify the audien
 
 ### /get-readability [POST]
 
-Send either 'documentDataArray' or 'content'. It is important to specify the paragraphs to the API in order to get an accurate audience level.
+Send either 'documentDataArray' or 'contentHtml'. It is important to specify the paragraphs to the API in order to get an accurate audience level.
 
 'documentDataArray' should be an array of text values, witch each item containing a paragraph text.
 
@@ -579,4 +579,94 @@ Send either 'documentDataArray' or 'content'. It is important to specify the par
                 "detail": "TOO SIMPLE",
                 "actual": "Knowledgeable",
                 "target": "General"
+            }
+            
+
+## Document / Keywords [/analyze-text/get-keywords]
+
+### /get-keywords [POST]
+
+parameters: 'content' | 'contentHtml' | 'documentDataArray'
+
++ Request (application/json)
+
+        {
+            "contentHtml": "<p>Creating assets that they can print out or physically use in their own strategy proves to increase the value of your ebook.</p><p>Provide them with the tools and resources to help them take action.</p><p>This strategy can also create an opening to naturally add your tool/product to the ebook.</p>"
+        }
+
++ Response 200 (application/json)
+
+    + Headers
+
+            Location: /analyze-text/get-keywords
+
+    + Body
+
+            {
+              "status": 10,
+              "keywordsArray": [
+                "ebook",
+                "strategy",
+                "print",
+                "increase",
+                "resources",
+                "action",
+                "tools"
+              ]
+            }
+            
+
+## Document / Analysis [/post/analyze]
+
+### /post/analyze [POST]
+
+Required params: 
+- 'title' -> document title, witch will influence score
+- 'content' -> should be a block of text containing the tag \<p\>\</p\> for each paragraph. Will accept HTML as well.
+- 'sophisticationBandId' -> target audience level
+
+Response will contain Atomic Score for the document / analysis will contain more detailed information. Response time should be ~= 1 second for each 1k words.
+
++ Request (application/json)
+
+        {
+            "title": "How To Make That Boring Ebook Standout?",
+            "content": "<p>Creating assets that they can print out or physically use in their own strategy proves to increase the value of your ebook.</p><p>Provide them with the tools and resources to help them take action.</p><p>This strategy can also create an opening to naturally add your tool/product to the ebook.</p>",
+            "sophisticationBandId": 4
+        }
+
++ Response 200 (application/json)
+
+    + Headers
+
+            Location: /post/analyze
+
+    + Body
+
+            {
+              "status": 10,
+              "data": {
+                "scoring": 44,
+                "analysis": {
+                  "pee": {}, // plain English errors
+                  "ste": {}, // style errors
+                  "pue": {}, // punctuation errors
+                  "lw": {},  // linguistic warnings
+                  "le": {},  // linguistic errors
+                  "em": {},  // emotion
+                  "lr": {},  // compression
+                  "tg": {},  // keywords / topics
+                  "su": {},  // surprise
+                  "lc": {},  // urls
+                  "tm": {},  // title
+                  "tq": {},  // titleQuestion
+                  "tpp": {}, // titlePronoun
+                  "ln": {},  // length
+                  "gm": {},  // grammar mistakes
+                  "sem": {}, // semantic mistakes
+                  "pwd": {}, // paragraph density
+                  "sm": {},  // spelling mistakes
+                  "so": {}   // readability
+                }
+              }
             }
