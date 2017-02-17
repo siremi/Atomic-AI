@@ -33,7 +33,7 @@ $requestArray["content"] = "<p>Once there was a Czar who had three lovely daught
 $requestArray["sophisticationBandId"] = $atomic_reach->sophisticationBandIdsArray["Knowledgeable"];
 
 // API call
-$responseJsonObj = $atomic_reach->doApiCall('/post/analyze', $requestArray);
+$responseJsonObj = $atomic_reach->doApiCall('/post/analyze', $requestArray, 'POST');
 
 echo "Sending 'title' / 'content': \n<BR>";
 echo "<h2>",$requestArray["title"],"</h2>";
