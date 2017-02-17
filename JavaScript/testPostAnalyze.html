@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>AR OAuth Prototype</title>
+
+    <!-- JavaScripts -->
+    <script src="jQuery/jquery-3.1.1.min.js"></script>
+
+    <!--Atomic Reach-->
+    <script src="lib/js.cookie.js"></script>
+    <script src="lib/md5.js"></script>
+    <script src="lib/oauth.js"></script>
+    <script src="lib/sha1.js"></script>
+    <script src="lib/api_client.js"></script>
+    <script src="ar_config.js"></script>
+
+</head>
+<body>
+
+<h1>Atomic Reach OAuth Prototype</h1>
+
+<div>
+    Check Developer console for API response.
+</div>
+
+<script type="text/javascript">
+
+    $(document).ready(function ()
+    {
+        var client = {};
+        client = arClient();
+        // set delay interval between requests (ms)
+        client.setDelayInterval(0);
+        // set debug verbose mode
+        client.setDebugMode(true);
+        // identify with an app name
+        client.setAppName('TEST_APP');
+        // issue / verify access tokens
+        client.init(API_HOST, CONSUMER_KEY, CONSUMER_SECRET, callbackApiConnected);
+
+        // API connected and ready to receive calls
+        function callbackApiConnected()
+        {
+            var requestData = {};
+
+            requestData["title"] = "The Czar and his Daughters";
+
+            requestData["content"] = "<p>Once there was a Czar who had three lovely daughters. One day the three daughters went walking in the woods.</p><p>They were enjoying themselves so much that they forgot the time and stayed too long. A dragon kidnapped the three daughters. As they were being dragged off they cried for help.</p><p>Three heroes heard their cries and set off to rescue the daughters. The heroes came and fought the dragon and rescued the maidens. Then the heroes returned the daughters to their palace. When the Czar heard of the rescue, he rewarded the heroes.</p>";
+
+            // target audience level | 1,2,3,4,5 | optional | set to Knowledgeable by default
+            requestData["sophisticationBandId"] = client.sophisticationBandIdsArray["Knowledgeable"];
+
+            // do the API call
+            client.doApiCall('/post/analyze', requestData, apiCallProcessResp);
+
+            // process response
+            function apiCallProcessResp(resp)
+            {
+                console.log('apiCallProcessResp() ', resp);
+            }
+
+        }
+
+    });
+
+</script>
+
+</body>
+</html>
