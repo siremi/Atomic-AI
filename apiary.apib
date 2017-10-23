@@ -621,7 +621,7 @@ parameters: 'content' | 'contentHtml' | 'documentDataArray'
 ### /post/analyze [POST]
 
 Required params: 
-- 'title' -> document title, witch will influence score
+- 'title' -> document title, it will influence score
 - 'content' -> should be a block of text containing the tag \<p\>\</p\> for each paragraph. Will accept HTML as well.
 - 'sophisticationBandId' -> target audience level
 
@@ -646,7 +646,7 @@ Response will contain Atomic Score for the document / analysis will contain more
             {
               "status": 10,
               "data": {
-                "scoring": 44,
+                "scoring": 57,
                 "analysis": {
                   "pee": {}, // plain English errors
                   "ste": {}, // style errors
