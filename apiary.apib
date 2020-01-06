@@ -1,5 +1,5 @@
 FORMAT: 1A
-HOST: https://app.atomicreach.com
+HOST: https://api-staging.atomicreach.com
 
 # Atomic AI Platform
 
@@ -7,6 +7,80 @@ Developers API Documentation
 http://docs.atomicreach.apiary.io
 
 For more information endpoints and pricing <a class='editorBar__pushButton' href='https://www.atomicreach.com/about/#contact-us' style="color:red">Click Here</a>
+
+
+## Content Optimization [/content/optimize]
+
+### /content/optimize [POST]
+
+It will return the optimized version of the original body of text / html.
+Response data will contain a DOM body that can be compared against the original context with word replacements and alternatives.
+
++ Request (application/x-www-form-urlencoded)
+
+    + Body
+
+            API_DEMO=1
+            &body=%3Cp%3EThis+is+a+test+to+test+the+prototype.%3C%2Fp%3E
+
++ Parameters
+    + body (required, Text/Html (urlencoded), `%3Cp%3EThis+is+a+test+to+test+the+prototype.%3C%2Fp%3E`)
+    + contentType (optional, string) - `article` (default), `email`
+    + profileId (optional, integer) - Custom scoring profile from AR Platform
+
++ Response 200 (application/json)
+
+        {
+          "status": 10,
+          "message": "SUCCESS",
+          "data": {
+            "body": "<p data-index='0'>This is a <word data-index='3' data-alts='[\"trial\",\"demonstration\",\"show\"]' data-replaced='false'>test</word> to <word data-index='5' data-alts='[\"show\",\"check\",\"measure\"]' data-replaced='true' data-original='test'>prove</word> the <word data-index='7' data-alts='[\"design\",\"model\",\"robot\",\"concept\"]' data-replaced='false'>prototype</word>.</p>\n",
+            "replacements": {
+              "p-0": {
+                "w-5": {
+                  "test": "prove"
+                }
+              }
+            },
+            "alternatives": {
+              "p-0": {
+                "w-3": {
+                  "test": [
+                    "trial",
+                    "demonstration",
+                    "show"
+                  ]
+                },
+                "w-5": {
+                  "test": [
+                    "show",
+                    "check",
+                    "measure"
+                  ]
+                },
+                "w-7": {
+                  "prototype": [
+                    "design",
+                    "model",
+                    "robot",
+                    "concept"
+                  ]
+                }
+              }
+            }
+          },
+          "execTime": "173 ms"
+        }
+
+
++ Response 200 (application/json)
+
+        {
+            "status": 24,
+            "error": "'body' param is required! text/html"
+        }
+
+
 
 ## Real Time Analyze Text API [/analyze-text/master]
 
